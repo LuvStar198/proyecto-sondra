@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulación de Crecimiento de Usuarios</title>
+
+  <!-- Hoja de estilos propia -->
+  <link rel="stylesheet"
+        href="{{ url_for('static', filename='estilos/styles.css') }}">
+
+  <!-- Font Awesome (íconos) -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha512-..."
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer" />
+
+  <!-- Chart.js + plugin de anotaciones -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0/dist/chartjs-plugin-annotation.min.js"></script>
+</head>
+<body>
+  <!-- ───────────── Header ───────────── -->
+  <header>
+    <h1><i class="fa-solid fa-users"></i> Simulación de Crecimiento de Usuarios</h1>
+  </header>
+
+  <!-- ───────────── Main ───────────── -->
+  <main>
+    <!-- Parámetros del modelo -->
+    <section class="card">
+      <h2>Parámetros del Modelo</h2>
+      <div class="inputs">
+        <label>L (usuarios máximos)
+          <input type="number" id="LInput" value="10000" min="1" />
+        </label>
+        <label>k (tasa de crecimiento)
+          <input type="number" id="kInput" value="0.8" step="0.1" min="0.01" />
+        </label>
+        <label>t<sub>0</sub> (semana de inflexión)
+          <input type="number" id="t0Input" value="5" step="0.1" min="0" />
+        </label>
+        <button id="simulateBtn"><i class="fa-solid fa-chart-line"></i> Simular</button>
+      </div>
+      <p class="note">
+        Modifica los valores y presiona <strong>Simular</strong> para actualizar las curvas.
+      </p>
+    </section>
+
+    <!-- Resultados -->
+    <section class="card">
+      <h2>Resultados</h2>
+      <canvas id="growthChart"></canvas>
+      <p id="recommendation" class="note"></p>
+    </section>
+  </main>
+
+  <!-- Lógica propia -->
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

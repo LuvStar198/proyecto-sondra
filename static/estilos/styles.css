@@ -1,0 +1,127 @@
+:root {
+  --clr-primary: #0078d4;
+  --clr-secondary: #ff8c00;
+  --clr-bg: #f4f6f9;
+  --clr-text: #333;
+}
+
+/* ------------------------------------------------------------------ */
+/* Reset mínimo                                                       */
+/* ------------------------------------------------------------------ */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: var(--clr-bg);
+  color: var(--clr-text);
+}
+
+/* ------------------------------------------------------------------ */
+/* Encabezado                                                         */
+/* ------------------------------------------------------------------ */
+header {
+  background: var(--clr-primary);
+  color: #fff;
+  padding: 1rem 2rem;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.75rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Contenedor principal                                               */
+/* ------------------------------------------------------------------ */
+main {
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Tarjetas genéricas                                                 */
+/* ------------------------------------------------------------------ */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* ------------------------------------------------------------------ */
+/* Formulario de parámetros                                           */
+/* ------------------------------------------------------------------ */
+.inputs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  align-items: end;
+  margin-bottom: 1rem; /* añade espacio para que la nota no se superponga */
+}
+
+label {
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+}
+
+input[type="number"] {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border 0.2s;
+}
+
+input[type="number"]:focus {
+  border-color: var(--clr-primary);
+  outline: none;
+}
+
+button {
+  appearance: none;
+  border: none;
+  background: var(--clr-secondary);
+  color: #fff;
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+button:hover { background: #e67e00; }
+
+/* ------------------------------------------------------------------ */
+/* Gráfico                                                            */
+/* ------------------------------------------------------------------ */
+canvas {
+  width: 100% !important;
+  height: 420px !important;
+}
+
+/* ------------------------------------------------------------------ */
+/* Textos secundarios                                                 */
+/* ------------------------------------------------------------------ */
+.note {
+  font-size: 0.95rem;
+  margin-top: 0.5rem; /* antes era -1rem, ahora evita superposición */
+  color: #555;
+}
+
+/* ------------------------------------------------------------------ */
+/* Responsivo                                                         */
+/* ------------------------------------------------------------------ */
+@media (min-width: 768px) {
+  h1 { font-size: 2rem; }
+}
