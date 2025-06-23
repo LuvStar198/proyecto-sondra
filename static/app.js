@@ -1,100 +1,112 @@
-
-const ctx = document.getElementById("growthChart");
+const ctx = document.getElementById('growthChart');
 let chartInstance = null;
 
-// -------------------------------------------------------------
-// Ayudantes matemáticos --> toda la lógica heavy vive en Python;
-// aquí solo mostramos el resultado.
-// -------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// Función que recibe el JSON de /simulate y dibuja el gráfico
+// -----------------------------------------------------------------------------
 function renderChart({ t, usuarios, derivada, maxWeek }) {
+  // 1) Transformar los arrays en pares {x, y} para usar escala 'linear'
+  const dataUsers   = t.map((ti, i) => ({ x: Number(ti), y: usuarios[i] }));
+  const dataDeriv   = t.map((ti, i) => ({ x: Number(ti), y: derivada[i] }));
+
   const data = {
-    labels: t,
     datasets: [
       {
-        label: "Usuarios acumulados U(t)",
-        data: usuarios,
+        label: 'Usuarios acumulados U(t)',
+        data: dataUsers,
         borderWidth: 2,
-        borderColor: "rgba(0,120,212,1)",
-        backgroundColor: "rgba(0,120,212,0.08)",
+        borderColor: 'rgba(0,120,212,1)',
+        backgroundColor: 'rgba(0,120,212,0.08)',
         tension: 0.2,
+        pointRadius: 2,
       },
       {
         label: "Tasa de crecimiento U'(t)",
-        data: derivada,
+        data: dataDeriv,
         borderWidth: 2,
-        borderColor: "rgba(255,140,0,1)",
-        backgroundColor: "rgba(255,140,0,0.08)",
+        borderColor: 'rgba(255,140,0,1)',
+        backgroundColor: 'rgba(255,140,0,0.08)',
         tension: 0.2,
-        yAxisID: "y1",
+        yAxisID: 'y1',
+        pointRadius: 2,
       },
     ],
   };
 
+  // 2) Configuración
   const options = {
     responsive: true,
-    interaction: { mode: "index", intersect: false },
+    interaction: { mode: 'index', intersect: false },
     stacked: false,
+    scales: {
+      x: {
+        type: 'linear',
+        min: 0,
+        max: 10,
+        ticks: {
+          stepSize: 1,
+          callback: (value) => value.toFixed(0),
+        },
+        title: { display: true, text: 'Semana' },
+      },
+      y: {
+        type: 'linear',
+        position: 'left',
+        title: { display: true, text: 'Usuarios' },
+      },
+      y1: {
+        type: 'linear',
+        position: 'right',
+        grid: { drawOnChartArea: false },
+        title: { display: true, text: 'Tasa de crecimiento' },
+      },
+    },
     plugins: {
-      legend: { position: "top" },
+      legend: { position: 'top' },
       annotation: {
         annotations: {
           line1: {
-            type: "line",
+            type: 'line',
             xMin: maxWeek,
             xMax: maxWeek,
-            borderColor: "red",
+            borderColor: 'red',
             borderWidth: 2,
             borderDash: [6, 6],
             label: {
               enabled: true,
               content: `Semana ${maxWeek.toFixed(1)}`,
-              position: "start",
-              backgroundColor: "rgba(0,0,0,0.7)",
-              color: "#fff",
+              position: 'start',
+              backgroundColor: 'rgba(0,0,0,0.7)',
+              color: '#fff',
             },
           },
         },
       },
     },
-    scales: {
-      y: {
-        type: "linear",
-        position: "left",
-        title: { display: true, text: "Usuarios" },
-      },
-      y1: {
-        type: "linear",
-        position: "right",
-        grid: { drawOnChartArea: false },
-        title: { display: true, text: "Tasa de crecimiento" },
-      },
-      x: { title: { display: true, text: "Semana" } },
-    },
   };
 
+  // 3) Crear o actualizar gráfico
   if (chartInstance) {
-    // Actualiza
     chartInstance.data = data;
     chartInstance.options = options;
     chartInstance.update();
   } else {
-    // Crea por primera vez
-    chartInstance = new Chart(ctx, { type: "line", data, options });
+    chartInstance = new Chart(ctx, { type: 'line', data, options });
   }
 
-  // Recomendación en texto
-  document.getElementById("recommendation").textContent =
+  // 4) Texto de recomendación
+  document.getElementById('recommendation').textContent =
     `🔎 Punto de máximo crecimiento: semana ${maxWeek.toFixed(1)}. ` +
-    "✅ Recomendación: escalar infraestructura y lanzar campañas justo antes de esta fecha.";
+    '✅ Recomendación: escalar infraestructura y lanzar campañas justo antes de esta fecha.';
 }
 
-// -------------------------------------------------------------
-// Función principal: lee inputs, llama a la API y envía a render
-// -------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// Función principal: lee inputs, llama a la API y envía a renderChart
+// -----------------------------------------------------------------------------
 function simulate() {
-  const L = document.getElementById("LInput").value || 10000;
-  const k = document.getElementById("kInput").value || 0.8;
-  const t0 = document.getElementById("t0Input").value || 5;
+  const L  = document.getElementById('LInput').value || 10000;
+  const k  = document.getElementById('kInput').value || 0.8;
+  const t0 = document.getElementById('t0Input').value || 5;
 
   fetch(`/simulate?L=${L}&k=${k}&t0=${t0}`)
     .then((res) => {
@@ -102,11 +114,11 @@ function simulate() {
       return res.json();
     })
     .then(renderChart)
-    .catch((err) => alert("Error al obtener datos: " + err));
+    .catch((err) => alert('Error al obtener datos: ' + err));
 }
 
-// -------------------------------------------------------------
-// Hooks del DOM
-// -------------------------------------------------------------
-window.addEventListener("DOMContentLoaded", simulate);
-document.getElementById("simulateBtn").addEventListener("click", simulate);
+// -----------------------------------------------------------------------------
+// Inicialización
+// -----------------------------------------------------------------------------
+window.addEventListener('DOMContentLoaded', simulate);
+document.getElementById('simulateBtn').addEventListener('click', simulate);
